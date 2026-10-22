@@ -139,6 +139,10 @@ select {
   border: var(--box-border-width) solid var(--border);
   border-radius: var(--box-radius);
 }
+/* No focus ring on a dropdown: Safari draws a blue one after
+   it's tapped, and it stays on after the choice is made, until
+   something else is tapped. */
+select:focus, select:focus-visible { outline: none; }
 
 /* Every disabled button and dropdown is dimmed the same way. */
 button:disabled, select:disabled {
