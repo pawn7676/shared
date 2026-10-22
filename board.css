@@ -1,0 +1,55 @@
+/*  board.css - the look of the chessboard.
+ *
+ *  A shared file: ONE copy, used by every project, next to
+ *  board.js in the folder "shared". Each page loads it in
+ *  its <head>:
+ *    <link rel="stylesheet" href="../shared/board.css">
+ *  A change here reaches every project at once: after
+ *  changing it, try each project.
+ *
+ *  Every color board.js draws with is a setting here, and
+ *  so is the font of the board's letters and numbers.
+ *  board.js asks for each one by its name (board.js [#3]),
+ *  so a name changed here has to change there too. A
+ *  missing or mistyped color is reported, and drawn in the
+ *  page's --error color instead. The colors are Lichess's
+ *  own. (The board's size and its place on the page are
+ *  each project's own, in its own stylesheet.)
+ *
+ *  The letters' font, Noto Sans, is loaded by theme.css,
+ *  the house style next to this file - so a page loads
+ *  theme.css first, then this file. Without theme.css the
+ *  letters are drawn in the system font instead.
+ */
+
+:root {
+  /* the squares */
+  --board-light:           #f0d9b5;
+  --board-dark:            #b58863;
+  /* a tapped piece's square */
+  --board-light-selected:  #809668;
+  --board-dark-selected:   #636e40;
+  /* the last move's two squares */
+  --board-light-last-move: #ccd069;
+  --board-dark-last-move:  #a8a23b;
+
+  /* the glow on a king in check (board.js [#5]): its center,
+     the color it blends into, and the two it fades out
+     through toward the square's edge */
+  --check-halo-core:       #ff0000;
+  --check-halo-mid:        #e70000;
+  --check-halo-fade-start: #a90000;
+  --check-halo-fade-end:   #9e0000;
+
+  /* the a-h / 1-8 labels and the material count (board.js
+     [#6]): on a light square, a deeper brown than the dark
+     squares, so it reads better; on a dark square, the light
+     squares' color */
+  --board-coord-on-light:  #946f51;
+  --board-coord-on-dark:   var(--board-light);
+  /* their font - Noto Sans (loaded by theme.css), as on
+     Lichess (Menlo's "1" has a base) - and its weight (400
+     normal, 700 bold) */
+  --board-coord-font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --board-coord-font-weight: 600;
+}

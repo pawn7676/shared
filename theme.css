@@ -1,0 +1,242 @@
+/*  theme.css - the house style every project shares.
+ *
+ *  A shared file: ONE copy, used by every project, in the
+ *  folder "shared", next to the projects' folders. Each
+ *  page loads it in its <head>, FIRST, before every other
+ *  stylesheet, so a project's own stylesheet can build on
+ *  it, and change anything for itself:
+ *    <link rel="stylesheet" href="../shared/theme.css">
+ *    <link rel="stylesheet" href="../shared/board.css">
+ *    (then the project's own stylesheet)
+ *  A change here reaches every project at once: after
+ *  changing it, try each project.
+ *
+ *  What's here is what every project has, so they all look
+ *  alike without each keeping its own copy:
+ *    [#1] THE FONT ......... Noto Sans, and --font-family
+ *    [#2] THE COLORS ....... the house colors, and the
+ *                            shapes of boxes and buttons
+ *    [#3] THE PAGE ......... its background, text and font
+ *    [#4] CONTROLS ......... buttons, dropdowns, the on/off
+ *                            switch
+ *    [#5] POP-UP MENUS ..... the panel, its title, its rows
+ *  What isn't here is each project's own: its layout, the
+ *  sizes of its text and controls, colors no other project
+ *  uses, and the names of its controls' states (a lit
+ *  button, a picked choice) - those use the colors in [#2].
+ *  The board's own look is in board.css, beside this file.
+ */
+
+/* ------------------------------------------------------------
+   [#1] THE FONT - Noto Sans, from NotoSans.ttf, next to this
+   file. A font file named in a stylesheet is looked for in
+   the stylesheet's own folder, so from here it's found from
+   every project. Its license, NotoSans-OFL.txt, sits beside
+   it, and has to go wherever the font goes.
+   Downloaded from Google Fonts (which ships it as
+   NotoSans-VariableFont_wdth,wght.ttf), renamed to
+   NotoSans.ttf. It's a variable font, so this one file covers
+   every weight from 100 to 900. There is no italic file, so
+   italic text is slanted by the browser instead. If the file
+   is missing, the system fonts named after it in
+   --font-family ([#2]) are used.
+   Once loaded, the font is the whole page's: the page's text
+   uses it ([#3]), and the board uses it for its letters and
+   numbers (board.css).
+   ------------------------------------------------------------ */
+@font-face {
+  font-family: "Noto Sans";
+  src: url("NotoSans.ttf") format("truetype");
+  font-weight: 100 900;
+  font-stretch: 62.5% 100%;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ------------------------------------------------------------
+   [#2] THE COLORS - and the shapes every box and button
+   shares. A project uses them by name, var(--panel) and so
+   on, in its own stylesheet too.
+   ------------------------------------------------------------ */
+:root {
+  /* the house font, and the system fonts used if NotoSans.ttf
+     is missing */
+  --font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --bg:            #161512; /* the page behind everything */
+  --panel:         #2b2a27; /* boxes, buttons, dropdowns,
+                               menus */
+  --border:        #404040; /* their edges; an "off" switch */
+  --text:          #bbbbbb; /* ordinary text */
+  --text-muted:    #8a8a86; /* quieter text: hints, labels */
+  --bright:        #eaeaea; /* text that stands out: titles,
+                               anything on a lit button */
+  /* LIT - a button that's on, a picked choice, an "on"
+     switch: --accent behind it, an --accent-bright edge and
+     --bright text */
+  --accent:        #4b6584;
+  --accent-bright: #5d7a9c;
+  /* dims the page behind a pop-up menu */
+  --backdrop:      #00000059;
+  /* a pop-up menu's drop shadow */
+  --panel-shadow:  #00000073;
+  /* problems and warnings - and a color that's missing or
+     mistyped, so the mistake shows */
+  --error:         #eb44d7;
+
+  /* the edge and the rounded corners of every box, button and
+     dropdown */
+  --box-border-width: 1px;
+  --box-radius:       4px;
+  /* how dim a disabled button or dropdown is (0 = invisible,
+     1 = not dimmed at all) */
+  --disabled-opacity: .35;
+}
+
+/* ------------------------------------------------------------
+   [#3] THE PAGE - its background, and its text in the house
+   font. (The size and weight of the text are each project's
+   own.)
+   ------------------------------------------------------------ */
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-family);
+}
+
+/* ------------------------------------------------------------
+   [#4] CONTROLS - the look every button, dropdown and on/off
+   switch starts from. A project sets their sizes, and its own
+   states: a lit button is --accent behind, an --accent-bright
+   edge and --bright text ([#2]).
+   ------------------------------------------------------------ */
+/* Browsers give form controls their own font instead of the
+   page's; this keeps every one in the house font. */
+button, select, input {
+  font-family: inherit;
+}
+
+/* A button: a panel-colored box with the house edge and
+   corners. The browser's own look is turned off (Safari's
+   would win over these colors in places). */
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--panel);
+  color: var(--text);
+  border: var(--box-border-width) solid var(--border);
+  border-radius: var(--box-radius);
+  cursor: pointer;
+}
+
+/* A dropdown: the same box. No arrow is drawn here - a
+   project that wants one adds it. */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--panel);
+  color: var(--text);
+  border: var(--box-border-width) solid var(--border);
+  border-radius: var(--box-radius);
+}
+
+/* Every disabled button and dropdown is dimmed the same way. */
+button:disabled, select:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: default;
+}
+
+/* The on/off switch, 52 x 30px: a rounded track, --border
+   when off and --accent when on, with a --bright knob. The
+   checkbox inside is hidden; the track is what shows. In the
+   page:
+     <span class="switch"><input type="checkbox">
+       <span class="slider"></span></span> */
+.switch { position: relative; display: inline-block; width: 52px; height: 30px; flex: none; }
+.switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.switch .slider {
+  position: absolute; inset: 0; cursor: pointer;
+  background: var(--border);
+  border-radius: 999px;
+  transition: background .15s ease;
+}
+.switch .slider::before {
+  content: "";
+  position: absolute;
+  height: 24px; width: 24px;
+  left: 3px; top: 3px;
+  background: var(--bright);
+  border-radius: 50%;
+  transition: transform .15s ease;
+}
+.switch input:checked + .slider { background: var(--accent); }
+.switch input:checked + .slider::before { transform: translateX(22px); }
+
+/* ------------------------------------------------------------
+   [#5] POP-UP MENUS - a panel over the dimmed page, with a
+   title that stays put while its rows scroll under it. In
+   the page:
+     <div class="menu-backdrop">     the dimmer; a tap on it
+                                     closes the menu
+       <div class="menu">
+         <div class="menu-title">Settings</div>
+         <div class="menu-row">      or a <label>, so a tap
+           <span class="menu-label">Name</span>  anywhere
+           (a control)               on it works the control
+         </div> ...
+   Each project places the menu itself (where it opens, how
+   tall it may be), and sets its z-index, its widest, and the
+   size of its text.
+   ------------------------------------------------------------ */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--backdrop);
+}
+/* As wide as its longest row. What doesn't fit scrolls, and
+   scrolling to its end doesn't go on to scroll the page
+   behind it. */
+.menu {
+  position: fixed;
+  width: max-content;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 16px 6px;
+  box-shadow: 0 8px 28px var(--panel-shadow);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  font-family: var(--font-family);
+}
+/* The title: bold and bright, pinned to the top while the
+   rows scroll under it (its own background hides them). A
+   row of its own, so a button can sit at its right. */
+.menu-title {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel);
+  font-weight: 700;
+  color: var(--bright);
+  padding: 18px 0 12px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+/* One setting per row: its name on the left, its control on
+   the right, a line between rows (none under the title,
+   which has its own). */
+.menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+.menu-title + .menu-row { border-top: none; }
+label.menu-row { cursor: pointer; }
+.menu-label { color: var(--text); white-space: nowrap; }
